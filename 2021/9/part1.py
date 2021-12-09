@@ -1,5 +1,3 @@
-#WHAT IS WRONG WITH YOU
-
 with open("input.in") as file:
     input = file.read()
     width = input.find("\n")
@@ -17,7 +15,9 @@ def is_low_point(idx: int) -> bool:
         if heightmap_flattened[idx - width] <= heightmap_flattened[idx]: return False
     #lower bound check
     if idx + width < len(heightmap_flattened):
-        if heightmap_flattened[idx + width - 1] <= heightmap_flattened[idx]: return False
+        if heightmap_flattened[idx + width] <= heightmap_flattened[idx]: return False
     return True
 
 print(sum(heightmap_flattened[idx] + 1 for idx in range(len(heightmap_flattened)) if is_low_point(idx)))
+
+print([idx for idx in range(len(heightmap_flattened)) if is_low_point(idx)])

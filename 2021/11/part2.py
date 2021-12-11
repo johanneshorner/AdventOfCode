@@ -14,7 +14,6 @@ def solve(area: list[list[int]]) -> int:
                     if (r, c) not in flash_pos and area[r][c] > 9:
                         flash = True
                         flash_pos.add((r, c))
-                        flash_count += 1
 
                         if c > 0:
                             area[r][c - 1] += 1
@@ -48,6 +47,6 @@ def solve(area: list[list[int]]) -> int:
         if flash_sync: 
             break
     
-    return i + 1
+    return i
 
-print(solve(lines))
+print(solve(lines) + 1)

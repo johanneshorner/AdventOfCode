@@ -3,7 +3,6 @@ with open("input.in") as file:
 
 def solve(area: list[list[int]]) -> int:
     def process_flashes(area: list[list[int]]) -> tuple[list[list[int]], int]:
-        flash_count = 0
         flash_pos = set()
         while True:
             flash = False
@@ -12,7 +11,6 @@ def solve(area: list[list[int]]) -> int:
                     if (r, c) not in flash_pos and area[r][c] > 9:
                         flash = True
                         flash_pos.add((r, c))
-                        flash_count += 1
 
                         if c > 0:
                             area[r][c - 1] += 1
@@ -36,7 +34,7 @@ def solve(area: list[list[int]]) -> int:
             for c in range(len(area[0])):
                 if (r, c) in flash_pos:
                     area[r][c] = 0
-        return (area, flash_count)
+        return (area, len(flash_pos))
 
     count = 0
 

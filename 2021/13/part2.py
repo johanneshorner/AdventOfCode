@@ -5,36 +5,26 @@ def get_points_and_fold_coords(input_str: str):
     return (
         [(int(x), int(y)) for x,y in (point.split(",") for point in point_lines)],
         [(name, int(xy)) for name,xy in (fold_line[fold_line.find("=") - 1:].split("=") for fold_line in fold_lines)]
-        )
+    )
 
 with open("input.in") as file:
     points, folds = get_points_and_fold_coords(file.read())
 
-new_points = []
+def fold(points, axis, n):
+    if axis == "x":
+        return {(n-(x-n), y) if x > n else (x, y) for x, y in points}
+    return {(x, n-(y-n)) if y > n else (x, y) for x, y in points}
 
-for fold in folds:
-    for point in points:
-        if fold[0] == "x":
-            if point[0] > fold[1]:
-                new_points.append((fold[1] - (point[0] - fold[1]), point[1]))
-            else:
-                new_points.append(point)
-        elif fold[0] == "y":
-            if point[1] > fold[1]:
-                new_points.append((point[0], fold[1] - (point[1] - fold[1])))
-            else:
-                new_points.append(point)
-    points = set(new_points)
-            
-new_points = set(new_points)
+for axis, n in folds:
+    points = fold(points, axis, n)
 
-side_len = max([n for point in new_points for n in point])
+side_len = max([n for point in points for n in point]) + 1
 
-paper = [["." for x in range(side_len)] for y in range(side_len)]
+paper = [[" "] * side_len for y in range(side_len)]
 
 for y in range(side_len):
     for x in range(side_len):
-        if (x, y) in new_points:
+        if (x, y) in points:
             paper[y][x] = "#"
 
 with open("output.txt", "w") as file:

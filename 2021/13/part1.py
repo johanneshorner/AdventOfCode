@@ -10,19 +10,12 @@ def get_points_and_fold_coords(input_str: str):
 with open("input.in") as file:
     points, folds = get_points_and_fold_coords(file.read())
 
-new_points = []
+def fold(points, axis, n):
+    if axis == "x":
+        return {(n-(x-n), y) if x > n else (x, y) for x, y in points}
+    return {(x, n-(y-n)) if y > n else (x, y) for x, y in points}
 
-for fold in folds[:1]:
-    for point in points:
-        if fold[0] == "x":
-            if point[0] > fold[1]:
-                new_points.append((fold[1] - (point[0] - fold[1]), point[1]))
-            else:
-                new_points.append(point)
-        elif fold[0] == "y":
-            if point[1] > fold[1]:
-                new_points.append((point[0], fold[1] - (point[1] - fold[1])))
-            else:
-                new_points.append(point)
+for axis, n in folds[:1]:
+    points = fold(points, axis, n)
             
-print(len(set(new_points)))
+print(len(points))

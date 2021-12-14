@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 def parse_input(input_str: str):
     template = input_str.split("\n\n")[0]
     insertion_rule_lines = input_str.split("\n\n")[1].split("\n")
@@ -10,20 +12,26 @@ def parse_input(input_str: str):
 with open("input.in") as file:
     template, insertion_rules = parse_input(file.read())
 
-def apply_step(polymer_map, insertion_rules):
-    polymer_map_new = polymer_map.copy()
-    for polymer in polymer_map:
-        new_polymer = polymer[0] + insertion_rules[polymer] + polymer[1]
-        new_polymer += polymer[i] + insertion_rules[polymer[i : i + 2]]
-    return new_polymer + polymer[-1]
+def apply_step(polymers, insertion_rules):
+    polymers_new = polymers.copy()
+    for polymer in polymers:
+        polymers_new[polymer[0] + insertion_rules[polymer[0 : 2]]] += polymers[polymer]
+        polymers_new[polymer] -= polymers[polymer]
+    
+    return polymers_new
 
-polymer_map = {template[i : i + 2] : 1 for i in range(len(template) - 1)}
-for i in range(10):
-    polymer = apply_step(polymer_map, insertion_rules)
+polymers = defaultdict(int, {template[i : i + 3] : 1 for i in range(len(template) - 2)})
+for i in range(1):
+    polymers = apply_step(polymers, insertion_rules)
 
-occurences = {char: 0 for char in set(polymer)}
+occurences = {char: 0 for char in set([char for polymer in polymers for char in polymer])}
 
 for char in occurences:
-    occurences[char] += polymer.count(char)
+    for polymer in polymers:
+        if char in polymer:
+            if char == template[0] or char == template[-1]:
+                occurences[char] += (polymer.count(char) / 2) + 1
+            else:
+                occurences[char] += polymer.count(char) / 2
 
 print(max(occurences.values()) - min(occurences.values()))

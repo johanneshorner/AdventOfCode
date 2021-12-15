@@ -16,6 +16,9 @@ def dikstra(grid, start):
         if distance > distances[(x, y)]:
             continue
 
+        if (len(grid) - 1, len(grid[0]) - 1) == (x, y):
+            return distance
+
         if x < len(grid[0]) - 1:
             neighbor = (x + 1, y)
             if distance + grid[y][x + 1] < distances[neighbor]:
@@ -25,6 +28,16 @@ def dikstra(grid, start):
             neighbor = (x, y + 1)
             if distance + grid[y + 1][x] < distances[neighbor]:
                 distances[neighbor] = distance + grid[y + 1][x]
+                heapq.heappush(heap, (distances[neighbor], neighbor))
+        if x > 0:
+            neighbor = (x - 1, y)
+            if distance + grid[y][x - 1] < distances[neighbor]:
+                distances[neighbor] = distance + grid[y][x - 1]
+                heapq.heappush(heap, (distances[neighbor], neighbor))
+        if y > 0:
+            neighbor = (x, y - 1)
+            if distance + grid[y - 1][x] < distances[neighbor]:
+                distances[neighbor] = distance + grid[y - 1][x]
                 heapq.heappush(heap, (distances[neighbor], neighbor))
 
     return distances[(len(grid) - 1, len(grid[0]) - 1)]

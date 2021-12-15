@@ -6,13 +6,18 @@ with open("input.in") as file:
     template, _, *insertion_rules = file.read().splitlines()
     insertion_rules = dict(rule.split(" -> ") for rule in insertion_rules)
 
-def apply_step(polymers: defaultdict, insertion_rules):
+polymers = defaultdict(int, {template[i : i + 2] : 1 for i in range(len(template) - 1)})
+elements = defaultdict(int)
+
+for el in template:
+    elements[el] += 1
+
+for _ in range(40):
     for polymer, count in polymers.copy().items():
-        polymers_new[polymer[0] + insertion_rules[polymer[0 : 2]]] += polymers[polymer]
-        polymers_new[polymer] -= polymers[polymer]
-    return polymers_new
+        insert = insertion_rules[polymer]
+        polymers[polymer] -= count
+        polymers[polymer[0] + insert] += count
+        polymers[insert + polymer[1]] += count
+        elements[insert] += count
 
-polymers = defaultdict(int, {template[i : i + 3] : 1 for i in range(len(template) - 2)})
-
-for _ in range(STEPS):
-    polymers = apply_step(polymers, insertion_rules)
+print(max(elements.values()) - min(elements.values()))

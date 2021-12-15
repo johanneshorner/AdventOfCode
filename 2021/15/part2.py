@@ -1,24 +1,27 @@
 import math
+import heapq
 
 with open("input.in") as file:
     risk_level_graph = [[int(risk_level) for risk_level in line.strip()] for line in file]
 
 def dikstra(graph):
-    unvisited = set([(x, y) for y in range(len(graph)) for x in range(len(graph[0]))])
-    distances = {node : math.inf for node in unvisited}
+    distances = {(x, y) : math.inf for y in range(len(graph)) for x in range(len(graph[0]))}
 
     distances[(0, 0)] = 0
-    
-    while (len(graph) - 1, len(graph[0]) - 1) in unvisited:
-        temp_distances = {node : distances[node] for node in unvisited}
-        x, y = min(temp_distances, key=temp_distances.get)
+    heap = []
+    heapq.heappush(heap, (0, (0, 0)))
+
+    while len(heap) > 0:
+        distance, (x, y) = heapq.heappop(heap)
         
         if x < len(graph[0]) - 1:
-            distances[(x + 1, y)] = min(distances[(x + 1, y)], distances[(x, y)] + graph[y][x + 1])
+            if distance + graph[y][x + 1] < distances[(x + 1, y)]:
+                distances[(x + 1, y)] = distance + graph[y][x + 1]
+                heapq.heappush(heap, (distances[(x + 1, y)], (x + 1, y)))
         if y < len(graph) - 1:
-            distances[(x, y + 1)] = min(distances[(x, y + 1)], distances[(x, y)] + graph[y + 1][x])
-
-        unvisited.remove((x, y))
+            if distance + graph[y + 1][x] < distances[(x, y + 1)]:
+                distances[(x, y + 1)] = distance + graph[y + 1][x]
+                heapq.heappush(heap, (distances[(x, y + 1)], (x, y + 1)))
 
     return distances[(len(graph) - 1, len(graph[0]) - 1)]
 

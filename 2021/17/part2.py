@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-TYPE_ID_LITERAL_VALUE = 4
-
->>>>>>> b74e1bf37e00402ac47e753181183b7c42cba57e
 with open("input.in") as file:
     input = file.read().strip()
     values = [values[values.index("=")+1:].split("..") for values in input[input.index("x"):].split(", ")]

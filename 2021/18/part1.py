@@ -3,21 +3,23 @@ import functools
 with open("input.in") as file:
     sf_numbers = [eval(line) for line in file]
 
-def reduce(number, recursion_counter):
-    if recursion_counter + 1 == 4:
-        #explode
-        pass
+def reduce(number: list):
+    while True:
+        number_old = number.copy()
 
-    
 
+
+        if number_old == number:
+            break
+
+    return number
 
 def add(left: list, right: list) -> list:
     new_number = []
     new_number.append(left)
     new_number.append(right)
 
-    while reduce(new_number, 0):
-        pass
+    new_number = reduce(new_number)
 
     return new_number
 

@@ -75,4 +75,11 @@ result = functools.reduce(lambda a, b: add(a, b), sf_numbers)
 def calc_magnitude(sf_number):
     return eval(sf_number.replace("[", "(3*").replace(",", " + 2*").replace("]", ")"))
 
-print(calc_magnitude(tokens_to_str(result)))
+sums = []
+
+for number_left in sf_numbers:
+    for number_right in sf_numbers:
+        sums.append(calc_magnitude(tokens_to_str(add(number_left, number_right))))
+        sums.append(calc_magnitude(tokens_to_str(add(number_right, number_left))))
+
+print(max(sums))

@@ -48,8 +48,3 @@ def solve(cuboids: list[list]):
 cuboids = get_input()
 
 print(solve(cuboids))
-
-#1. add all "on"-cuboids to list, by applying a new cuboid to all cuboids already in the list, keeping the bigger cuboid and removing the overlapping part on the smaller one
-#2. when encountering an "off"-cuboid apply it to all existing "on"-cuboids by removing the overlapping part and splitting the remaining volume into cuboids
-#3. repeat 1&2 until cuboids are exhausted
-#4. sum the volume of the cuboids in the list
